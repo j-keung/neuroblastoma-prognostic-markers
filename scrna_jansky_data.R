@@ -30,7 +30,8 @@ windowsFonts("Roboto" = windowsFont("Roboto"))
 
 ##----------Load list of marker genes----------##
 
-setwd("/Users/jenna/Downloads/markers")
+setwd("/Users/jenna/Downloads/markers") 
+#markers used by other neuroblastoma papers and from the literature
 celltype_markers <- read_excel('cell_markers.xlsx',col_names = TRUE)
 mes_adr_markers <- read_excel('mes_adr.xlsx',col_names = TRUE)
 
@@ -147,7 +148,8 @@ sce <- runUMAP(sce,
 ##-----------Clustering------##
 
 
-
+#CRUK scRNA-seq tutorial
+#https://bioinformatics-core-shared-training.github.io/SingleCell_RNASeq_May23/UnivCambridge_ScRnaSeqIntro_Base/Markdowns/08_Clustering.html
 
 #The following plots are used to test how accurate the clustering was
 plotSilBeeswarm <- function(silDat){
@@ -238,7 +240,7 @@ sce.seurat <- SetIdent(sce.seurat, value = "leiden")
 
 ##-----------Seurat plots------##
 
-#PCA plot coloured by batch
+#PCA plot coloured by batch (i.e. by patient)
 pdf("plots/PCA_batch.pdf")
 DimPlot(sce.seurat, reduction = "PCA", group.by = "batch")
 dev.off()
@@ -338,6 +340,8 @@ dev.off()
 
 ##-----------Checking the 14 gene signature for ALL cell types-----##
 
+#Genes identified from the cohort before us at Imperial
+
 #High expression of these genes associated with poor prognosis:
 #  HSD17B12, NXT2, TXNDC5, RACK1, CD147, CCDC125, HAPLN4, HEBP2
 
@@ -349,23 +353,23 @@ pal <- viridis(n = 10, option = "D")
 
 
 
+#Plot the 'good' genes together and the 'bad' genes together
 pdf("plots/gene_sig.pdf")
-
 
 poor_prognosis <- c("HSD17B12", "NXT2", "TXNDC5", "RACK1", "CD147", "CCDC125", "HAPLN4", "HEBP2")
 sce.seurat <- AddModuleScore( sce.seurat, features = list(poor_prognosis), name="poor_prognosis")
 FeaturePlot_scCustom(sce.seurat, features = "poor_prognosis1", pt.size=0.5,na_color = "lightgray",colors_use = pal) + ggtitle('Poor prognosis genes')
 
-
-
 good_prognosis <- c("B3GAT1", "FNBP1", "IGSF10", "IQCE", "KCNQ3", "TOX2")
 sce.seurat <- AddModuleScore( sce.seurat.named,features = list(good_prognosis),name="good_prognosis")
 FeaturePlot_scCustom(sce.seurat, features = "good_prognosis1", pt.size=0.5,na_color = "lightgray",colors_use = pal) + ggtitle('Good prognosis genes')
 
-
 dev.off()
 
 
+
+
+#Plot the genes individually
 #RACK1, CD147 not present
 all_genes <- c("NTRK1","TP53","PTPN6","HSD17B12", "NXT2", "TXNDC5", "CCDC125", "HAPLN4", "HEBP2","B3GAT1", "FNBP1", "IGSF10", "IQCE", "KCNQ3", "TOX2")
 
@@ -464,6 +468,7 @@ Cell_Highlight_Plot(seurat_object = sce.fetal, cells_highlight = cells, pt.size 
 dev.off()
 
 
+#Plot for samples over 18 months and under 18 months
 
 pdf("plots/annotated_split_pathway2.pdf")
 
@@ -513,8 +518,6 @@ dev.off()
 sce.seurat.named[["plot"]] <- Idents(object = sce.seurat.named)
 table <- sce.seurat.named@meta.data
 
-
-#i have only the cells of the neuroblastoma cells coloured, the rest are in grey?
 #must turn metadata into regular table and then back again
 table$plot <- as.character(table$plot)
 table[table$batch == "control","plot"] <- "Controls"
