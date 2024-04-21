@@ -17,7 +17,7 @@ patient_data <- read.xlsx('patient_data_pathway.xlsx')
 #Read in differentially expressed genes (DEGs)
 # Comparison 1: Genes that were differentially expressed in malignant only sympathoblasts with activated pathway vs inactivated pathway IN BOTH JANSKY AND KILDISUITE DATASETS
 # Comparison 2: Genes that were differentially expressed in all sympathoblasts with activated pathway vs inactivated pathway IN BOTH JANSKY AND KILDISUITE DATASETS
-degs <- read.table("Data/Kildisuite_DEGs.txt")
+degs <- read.table("Data/DEGs_Analysis1.txt")
 
 #Log2 transform 'Fold change' column
 log2FC_norm <- unlist(log(degs[14], 2))
