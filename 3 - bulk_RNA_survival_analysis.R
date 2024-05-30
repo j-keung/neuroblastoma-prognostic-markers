@@ -223,7 +223,7 @@ x2_2[nrow(x2_2)+1, ] <- NA
 
 #Calculate prognostic score
 for(i in 2:length(x2_2)){  #number of patients  (omit first column with the gene names)
-  total <- 1
+  total <- 1  #or total <- 0?
   for(j in 1:nrow(x2_2)-1){  #number of genes(omit last row which is empty)
     coef <- sig_genes2[j,]  #lasso regression coefficient
     z_score <- x2_2[j,i]
